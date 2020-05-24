@@ -28,8 +28,12 @@ or
 Enable-WindowsOptionalFeature -Online -FeatureName containers -All
 Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
 ```
+#there are 2 docker provider "DockertProvider" and "DockerMsftProvider"
 
 ```
+Install-Module DockertProvider -Force
+Install-Package Docker -ProviderName DockerProvider -Force
+or
 Install-Module DockerMsftProvider -Force
 Install-Package Docker -ProviderName DockerMsftProvider -Force
 
@@ -81,4 +85,32 @@ C:\ProgramData\docker\config\daemon.json  #if does not exist then "stop-service 
 
 
 .\dockerd.exe -D --experimental
+```
+
+```
+Enable-WindowsOptionalFeature –Online -FeatureName Microsoft-Hyper-V –All -NoRestart
+Install-WindowsFeature RSAT-Hyper-V-Tools -IncludeAllSubFeature
+
+https://andreigaspar.com/running-linux-containers-on-windows-server/
+
+[Environment]::SetEnvironmentVariable("LCOW_SUPPORTED", "1", "Machine")
+Restart-Service Docker
+
+```
+
+# To uninstall docker
+
+```
+Uninstall-Package -Name docker -ProviderName DockerMsftProvider
+Uninstall-Module -Name DockerMsftProvider
+
+Get-HNSNetwork | Remove-HNSNetwork
+
+Remove-Item "C:\ProgramData\Docker" -Recurse
+
+Remove-WindowsFeature Containers
+Remove-WindowsFeature Hyper-V
+
+Restart-Computer -Force
+
 ```
