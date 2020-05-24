@@ -1,12 +1,13 @@
 # Docker-
 Install docker on windows server 2016
 
-
+```
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 Install-PackageProvider -Name NuGet
 or #for particluar version of NuGet
 Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+```
 
 ```
 Install-WindowsFeature Hyper-V
