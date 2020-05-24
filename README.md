@@ -56,7 +56,7 @@ sconfig
 ```
 #restart system
 Restart-Computer -Force
-``
+```
 
 ```
 docker pull mcr.microsoft.com/windows/servercore:1607
