@@ -45,8 +45,10 @@ Install-Package -Name docker -ProviderName DockerMsftProvider -Force -RequiredVe
 ```
 Update-Module DockerMsftProvider
 ```
+```
+# to update system
 sconfig
-
+```
 ```
 #to check restarted is needed or not
 (Install-WindowsFeature Containers).RestartNeeded
@@ -74,7 +76,7 @@ Restart-Service docker
 ```
 
 ```
-# to enable experimental to "true"
+#to enable experimental to "true"
 C:\ProgramData\docker\config\daemon.json  #if does not exist then "stop-service docker" and run the below command
 
 
