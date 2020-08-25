@@ -1,0 +1,32 @@
+#backup
+iptables-save > IPtablesbackup.txt  
+
+#Restore
+iptables-restore < IPtablesbackup.txt 
+
+iptables -N DOCKER-USER
+
+iptables -N CUSTOM_SKY
+
+#ADD rule in iptable for docker
+
+iptables -A CUSTOM_SKY -p tcp --dport 11800 --source 164.52.200.59 --destination 172.18.0.3 -j ACCEPT
+iptables -A CUSTOM_SKY -p tcp --dport 6379 --source 0.0.0.0/0 --destination 172.17.0.2 -j DROP
+
+iptables -R DOCKER 1 -p tcp --source 0.0.0.0/0 --destination 172.18.0.3 --dport 11800 -j CUSTOM_SKY
+
+
+
+#delete any particular rule in iptables#replace DOCKER with type #
+iptables -L DOCKER --line-numbers
+#delete particular line replace 2 with line number
+iptables -D DOCKER 2
+
+
+
+#ADD rule in iptable
+iptables -A DOCKER -p tcp --source 119.82.0.0/16 --destination 172.18.0.4 --dport 8080 -j ACCEPT
+
+
+
+
