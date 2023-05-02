@@ -1,0 +1,37 @@
+FROM jenkins/jenkins:lts
+
+ARG REPOSITORY="test"
+ARG BUILD_TIME="date"
+
+ARG TERRAFORM_VERSION="1.2.8"
+ARG TFSEC_VERSION="1.28.1"
+ARG WGET_VERSION="1.*"
+ARG UNZIP_VERSION="6.*"
+
+LABEL dockerfile-last-revision="2023-05-01"
+LABEL maintainer="gaurav.yadav@adidas.com"
+LABEL repository=$REPOSITORY
+LABEL build-time=$BUILD_TIME
+LABEL terraform=$TERRAFORM_VERSION
+LABEL tfsec=$TFSEC_VERSION
+
+USER root
+RUN apt-get update -y \
+&& apt-get --no-install-recommends install wget=${WGET_VERSION} -y \
+&& apt-get --no-install-recommends install unzip=${UNZIP_VERSION} -y \
+&& apt-get clean \
+&& rm -rf /var/lib/apt/lists/*
+
+RUN wget --progress=dot:giga "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip"  \
+&& mv terraform_${TERRAFORM_VERSION}_linux_amd64.zip terraform.zip \
+&& unzip terraform.zip \
+&& mv terraform /usr/local/bin/terraform \
+&& chmod 0755 /usr/local/bin/terraform \
+&& rm terraform.zip \
+&& wget  --progress=dot:giga "https://github.com/aquasecurity/tfsec/releases/download/v${TFSEC_VERSION}/tfsec-linux-amd64" \
+&& mv tfsec-linux-amd64 tfsec \
+&& mv tfsec /usr/local/bin/tfsec \
+&& chmod 0755 /usr/local/bin/tfsec
+
+RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
+USER jenkins
